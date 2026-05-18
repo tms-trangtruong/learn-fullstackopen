@@ -4,7 +4,7 @@ const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, dataUsers, s
   const addName = (event) => {
     event.preventDefault()
     if (newName === '' || newNumber === '') {
-      setMessage('Name and number are required')
+      setMessageError('Name and number are required')
       return
     }
     const findSameName = dataUsers.find(user => user.name === newName)
@@ -20,7 +20,8 @@ const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, dataUsers, s
           setMessageSuccess('')
         }, 5000)
       }).catch((err) => {
-        setMessageError(`Error updating person: ${err}`)
+        console.log(err);
+        setMessageError(`Error updating person: ${err.response.data.error}`)
         setTimeout(() => {
           setMessageError('')
         }, 5000)
@@ -35,7 +36,7 @@ const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, dataUsers, s
           setMessageSuccess('')
         }, 5000)
       }).catch((err) => {
-        setMessageError(`Error adding person: ${err}`)
+        setMessageError(`Error adding person: ${err.response.data.error}`)
         setTimeout(() => {
           setMessageError('')
         }, 5000)

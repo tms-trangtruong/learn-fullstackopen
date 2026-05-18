@@ -13,7 +13,7 @@ const Persons = ({ dataUsers, setDataUsers, setMessageError, setMessageSuccess }
       if (err.status === 404) {
         setMessageError(`${dataUsers.find(user => user.id === id).name} has already been removed from server`)
       } else {
-        setMessageError('Error deleting person: ' + err.message)
+        setMessageError('Error deleting person: ' + err.response.data.error)
       }
       setTimeout(() => {
         setMessageError('')
