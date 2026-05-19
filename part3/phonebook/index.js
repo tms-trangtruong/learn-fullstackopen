@@ -10,7 +10,7 @@ app.use(express.json())
 app.use(express.static('dist'))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :type'))
 
-morgan.token('type', function (req, res) { return JSON.stringify(req.body) })
+morgan.token('type', function (req) { return JSON.stringify(req.body) })
 
 
 app.get('/', (req, res) => {
@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
 app.get('/api/persons', (req, res) => {
   Person.find({}).then(persons => {
     res.json(persons)
-  }).catch(error => {
+  }).catch(() => {
     res.status(500).end()
   })
 })
@@ -34,14 +34,14 @@ app.get('/api/persons/:id', (req, res, next) => {
       res.status(404).end()
     }
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
-app.get('/info', (req, res) => {
+app.get('/info', (req, res, next) => {
   Person.countDocuments().then(count => {
     res.send(`<p>Phonebook has info for ${count} people</p><p>${new Date()}</p>`)
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (req, res, next)=>{
@@ -49,7 +49,7 @@ app.delete('/api/persons/:id', (req, res, next)=>{
   Person.findByIdAndDelete(id).then(() => {
     res.status(204).end()
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.post('/api/persons', (req, res, next) => {
@@ -69,7 +69,7 @@ app.post('/api/persons', (req, res, next) => {
   person.save().then(savedPerson => {
     res.json(savedPerson)
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
@@ -87,7 +87,7 @@ app.put('/api/persons/:id', (req, res, next) => {
       res.json(updatedPerson)
     })
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
